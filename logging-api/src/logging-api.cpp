@@ -8,7 +8,13 @@ namespace logging
 	LogMessage::LogMessage(const severity& i_severity) :
 		_severity(i_severity)
 	{
-		*this << "[" << _severities[(int) _severity] << " " << __FILE__ << " " << __LINE__ << "]: ";
+		*this << "[" << severities[static_cast<int>(_severity)] << " " << __FILE__ << ":" << __LINE__ << "]: ";
+	}
+
+	LogMessage::LogMessage(const char * file, uint32_t line, const severity& i_severity) :
+		_severity(i_severity)
+	{
+		*this << "[" << severities[static_cast<int>(_severity)] << " " << file << ":" << line << "]: ";
 	}
 
 	LogMessage::~LogMessage()

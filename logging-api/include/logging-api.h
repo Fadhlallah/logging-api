@@ -4,29 +4,32 @@
 #pragma once
 
 #include <iostream>
+#include<sstream>
 
 // TODO: Reference additional headers your program requires here.
 
-#define LOG_DEBUG (message)								   \
-	LogMessage(logging::severity::DEBUG).flush()<<message<<"\n";
+#define MKSTR(message) #message
 
-#define LOG_INFO (message)								   \
-	LogMessage(logging::severity::INFO).flush()<<message<<"\n";
+#define LOG_DEBUG(message) 								   \
+	logging::LogMessage(__FILE__,  __LINE__, logging::severity::DEBUG)<<#message<<"\n";
 
-#define LOG_WARN (message)								   \
-	LogMessage(logging::severity::WARN).flush()<<message<<"\n";
+#define LOG_INFO(message)								   \
+	logging::LogMessage(__FILE__,  __LINE__, logging::severity::INFO)<<#message<<"\n";
 
-#define LOG_ERROR (message)								   \
-	LogMessage(logging::severity::ERROR).flush()<<message<<"\n";
+#define LOG_WARN(message)								   \
+	logging::LogMessage(__FILE__,  __LINE__, logging::severity::WARNING)<<#message<<"\n";
 
-#define LOG_FATAL (message)								   \
-	LogMessage(logging::severity::FATAL).flush()<<message<<"\n";
+#define LOG_ERROR(message)								   \
+	logging::LogMessage(__FILE__,  __LINE__, logging::severity::ERROR).flush()<<#message<<"\n";
+
+#define LOG_FATAL(message)								   \
+	logging::LogMessage(__FILE__,  __LINE__, logging::severity::FATAL).flush()<<#message<<"\n";
 
 
-#include<sstream>
+
 namespace logging
 {
-typedef enum class severity
+enum class severity
 {
 	DEBUG = 0,
 	INFO,
@@ -34,9 +37,9 @@ typedef enum class severity
 	ERROR,
 	FATAL,
 	maxNumber
-} ;
+};
 
-const char* _severities[(int) severity::maxNumber] =
+static const char* severities[(int)severity::maxNumber] =
 {
 	"DEBUG",
 	"INFO",
@@ -44,13 +47,17 @@ const char* _severities[(int) severity::maxNumber] =
 	"ERROR",
 	"FATAL"
 };
-
 class LogMessage : public std::stringstream
 {
-public:
+
+private: 
 	severity _severity;
+public:
+	
+	
 
 	LogMessage(const severity& i_severity);
+	LogMessage(const char* i_file, uint32_t line,  const severity& i_severity);
 	virtual ~LogMessage();
 
 };

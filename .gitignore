@@ -1,2 +1,5 @@
 
-logging-api/build/
+logging-api/build/*
+out
+CMakeSettings.json
+logging-api/build-vscode/*
